@@ -2,13 +2,20 @@ nome,modulo_elasticidade,tipo
 Polipropileno,2,Matriz
 Polietileno,1,Matriz
 Poliuretano,4,Matriz
+Poliéster,4,Matriz
 Fenólico,4,Matriz
+Resina Epóxi,5,Matriz
 Aço Inoxidável,207,Matriz
 Fibra de Celulose,40,Reforço
 Fibra de Sisal,30,Reforço
 Fibra de Linho,70,Reforço
+Fibra de Vidro,85,Reforço
+Fibra de Carbono,600,Reforço
+Nanotubos de Carbono,1000,Reforço
+Fibra de Basalto,95,Reforço
+Kevlar (Aramida),130,Reforço
+Boro,400,Reforço
 Aço de Alta Resistência,210,Reforço
 Níquel,200,Reforço
 Titânio,110,Reforço
 Zinco,108,Reforço
-Magnesio,45,Reforço

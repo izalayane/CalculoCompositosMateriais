@@ -142,13 +142,20 @@ with col2:
     with colB:
         unidade_area = st.selectbox("Unidade da Área", ["m²", "cm²", "mm²"])
         area_input = st.number_input(f"Área ({unidade_area})", min_value=0.0, value=1.0)
-    
-    df = pd.DataFrame({
-        'Composição (%)': [vol_matriz * 100, vol_reforco * 100]  # Multiplica por 100 para exibir em porcentagem
-    }, index=['Matriz', 'Reforço'])
 
-    # Mostrar o gráfico de barra horizontal
-    st.bar_chart(df)
+
+    # Gerar gráfico de pizza para mostrar as porcentagens
+    labels = ['Matriz', 'Reforço']
+    sizes = [vol_matriz * 100, vol_reforco * 100]
+    colors = ['#FF9999', '#66B2FF']
+
+    # Criar o gráfico com fundo transparente
+    fig, ax = plt.subplots()
+    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  # Equal aspect ratio para manter o gráfico circular
+
+    # Salvar o gráfico com fundo transparente e exibir no Streamlit
+    st.pyplot(fig, transparent=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -163,11 +170,16 @@ if st.button("Apagar"):
     
 # Botão Calcular
 if st.button("Calcular"):
-    E_matriz = converter_modulo_elasticidade(dados_matriz['modulo_elasticidade'], unidade_modulo)
-    E_reforco = converter_modulo_elasticidade(dados_reforco['modulo_elasticidade'], unidade_modulo)
+    # Verificação da soma dos volumes
+    if soma_volumes > 1:
+        st.error("Soma da fração volumétrica não deve ser maior que 1")
+    else:
+        # Calcular as forças somente se a soma dos volumes for válida
+        E_matriz = converter_modulo_elasticidade(dados_matriz['modulo_elasticidade'], unidade_modulo)
+        E_reforco = converter_modulo_elasticidade(dados_reforco['modulo_elasticidade'], unidade_modulo)
 
-    F_matriz, F_reforco, F_total = calcular_forcas(E_matriz, E_reforco, vol_matriz, vol_reforco, area, tensao)
-        
+        F_matriz, F_reforco, F_total = calcular_forcas(E_matriz, E_reforco, vol_matriz, vol_reforco, area, tensao)
+     
         # Exibir os resultados em colunas
     colA, colB, colC = st.columns(3)
     with colA:
@@ -190,3 +202,5 @@ if st.button("Calcular"):
                 <b>Força no Reforço:</b> {F_reforco:.2f} N
             </div>
         """, unsafe_allow_html=True)
+
+    
